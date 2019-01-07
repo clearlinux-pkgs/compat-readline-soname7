@@ -6,7 +6,7 @@
 #
 Name     : compat-readline-soname7
 Version  : 7.0
-Release  : 1
+Release  : 2
 URL      : http://mirrors.kernel.org/gnu/readline/readline-7.0.tar.gz
 Source0  : http://mirrors.kernel.org/gnu/readline/readline-7.0.tar.gz
 Source99 : http://mirrors.kernel.org/gnu/readline/readline-7.0.tar.gz.sig
@@ -15,6 +15,11 @@ Group    : Development/Tools
 License  : GPL-3.0
 Requires: compat-readline-soname7-lib = %{version}-%{release}
 Requires: compat-readline-soname7-license = %{version}-%{release}
+BuildRequires : gcc-dev32
+BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libstdc++32
+BuildRequires : glibc-dev32
+BuildRequires : glibc-libc32
 BuildRequires : ncurses-dev
 BuildRequires : ncurses-dev32
 Patch1: 0001-Defaultinput-meta-output-meta-to-on.patch
@@ -45,6 +50,16 @@ Provides: compat-readline-soname7-devel = %{version}-%{release}
 dev components for the compat-readline-soname7 package.
 
 
+%package dev32
+Summary: dev32 components for the compat-readline-soname7 package.
+Group: Default
+Requires: compat-readline-soname7-lib32 = %{version}-%{release}
+Requires: compat-readline-soname7-dev = %{version}-%{release}
+
+%description dev32
+dev32 components for the compat-readline-soname7 package.
+
+
 %package doc
 Summary: doc components for the compat-readline-soname7 package.
 Group: Documentation
@@ -62,6 +77,15 @@ Requires: compat-readline-soname7-license = %{version}-%{release}
 lib components for the compat-readline-soname7 package.
 
 
+%package lib32
+Summary: lib32 components for the compat-readline-soname7 package.
+Group: Default
+Requires: compat-readline-soname7-license = %{version}-%{release}
+
+%description lib32
+lib32 components for the compat-readline-soname7 package.
+
+
 %package license
 Summary: license components for the compat-readline-soname7 package.
 Group: Default
@@ -77,13 +101,16 @@ license components for the compat-readline-soname7 package.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+pushd ..
+cp -a readline-7.0 build32
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1546883595
+export SOURCE_DATE_EPOCH=1546883703
 export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -91,18 +118,38 @@ export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs=use
 %configure --disable-static --with-curses --enable-multibyte
 make  %{?_smp_mflags}
 
+pushd ../build32/
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export ASFLAGS="$ASFLAGS --32"
+export CFLAGS="$CFLAGS -m32"
+export CXXFLAGS="$CXXFLAGS -m32"
+export LDFLAGS="$LDFLAGS -m32"
+%configure --disable-static --with-curses --enable-multibyte   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+make  %{?_smp_mflags}
+popd
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
+cd ../build32;
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1546883595
+export SOURCE_DATE_EPOCH=1546883703
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/compat-readline-soname7
 cp COPYING %{buildroot}/usr/share/package-licenses/compat-readline-soname7/COPYING
+pushd ../build32/
+%make_install32
+if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
+then
+pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do ln -s $i 32$i ; done
+popd
+fi
+popd
 %make_install
 
 %files
@@ -123,6 +170,11 @@ cp COPYING %{buildroot}/usr/share/package-licenses/compat-readline-soname7/COPYI
 %exclude /usr/share/man/man3/history.3
 %exclude /usr/share/man/man3/readline.3
 
+%files dev32
+%defattr(-,root,root,-)
+%exclude /usr/lib32/libhistory.so
+%exclude /usr/lib32/libreadline.so
+
 %files doc
 %defattr(0644,root,root,0755)
 %exclude /usr/share/doc/readline/CHANGES
@@ -138,6 +190,13 @@ cp COPYING %{buildroot}/usr/share/package-licenses/compat-readline-soname7/COPYI
 /usr/lib64/libhistory.so.7.0
 /usr/lib64/libreadline.so.7
 /usr/lib64/libreadline.so.7.0
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libhistory.so.7
+/usr/lib32/libhistory.so.7.0
+/usr/lib32/libreadline.so.7
+/usr/lib32/libreadline.so.7.0
 
 %files license
 %defattr(0644,root,root,0755)
