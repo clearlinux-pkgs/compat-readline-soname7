@@ -1,0 +1,28 @@
+--- readline-7.0/configure~	2016-09-07 21:15:16.000000000 +0000
++++ readline-7.0/configure	2017-06-03 15:09:18.847587415 +0000
+@@ -5944,13 +5944,13 @@
+ if test "x$ac_cv_lib_termcap_tgetent" = xyes; then :
+   bash_cv_termcap_lib=libtermcap
+ else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tgetent in -ltinfo" >&5
+-$as_echo_n "checking for tgetent in -ltinfo... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tgetent in -ltinfow" >&5
++$as_echo_n "checking for tgetent in -ltinfow... " >&6; }
+ if ${ac_cv_lib_tinfo_tgetent+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-ltinfo  $LIBS"
++LIBS="-ltinfow  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -6088,7 +6088,7 @@
+ TERMCAP_LIB=-ltermcap
+ TERMCAP_DEP=
+ elif test $bash_cv_termcap_lib = libtinfo; then
+-TERMCAP_LIB=-ltinfo
++TERMCAP_LIB=-ltinfow
+ TERMCAP_DEP=
+ elif test $bash_cv_termcap_lib = libncurses; then
+ TERMCAP_LIB=-lncurses

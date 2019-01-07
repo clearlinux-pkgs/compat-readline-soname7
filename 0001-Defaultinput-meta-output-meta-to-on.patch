@@ -1,0 +1,34 @@
+From 7fc9b27bc4bdb6025bd956e2c29f4dd1f978cca7 Mon Sep 17 00:00:00 2001
+From: Dimitri John Ledkov <dimitri.j.ledkov@intel.com>
+Date: Mon, 2 Mar 2015 15:41:20 +0000
+Subject: [PATCH] Defaultinput-meta & output-meta to on.
+Organization: Intel Corporation (UK) Ltd. - Co. Reg. #1134945 - Pipers Way, Swindon SN3 1RJ
+
+---
+ bind.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/bind.c b/bind.c
+index 8acf4ac..90325aa 100644
+--- a/bind.c
++++ b/bind.c
+@@ -1491,14 +1491,14 @@ static const struct {
+   { "expand-tilde",		&rl_complete_with_tilde_expansion, 0 },
+   { "history-preserve-point",	&_rl_history_preserve_point,	0 },
+   { "horizontal-scroll-mode",	&_rl_horizontal_scroll_mode,	0 },
+-  { "input-meta",		&_rl_meta_flag,			0 },
++  { "input-meta",		&_rl_meta_flag,			1 },
+   { "mark-directories",		&_rl_complete_mark_directories,	0 },
+   { "mark-modified-lines",	&_rl_mark_modified_lines,	0 },
+   { "mark-symlinked-directories", &_rl_complete_mark_symlink_dirs, 0 },
+   { "match-hidden-files",	&_rl_match_hidden_files,	0 },
+   { "menu-complete-display-prefix", &_rl_menu_complete_prefix_first, 0 },
+   { "meta-flag",		&_rl_meta_flag,			0 },
+-  { "output-meta",		&_rl_output_meta_chars,		0 },
++  { "output-meta",		&_rl_output_meta_chars,		1 },
+   { "page-completions",		&_rl_page_completions,		0 },
+   { "prefer-visible-bell",	&_rl_prefer_visible_bell,	V_SPECIAL },
+   { "print-completions-horizontally", &_rl_print_completions_horizontally, 0 },
+-- 
+2.1.0
+

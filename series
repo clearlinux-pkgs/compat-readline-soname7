@@ -1,0 +1,6 @@
+0001-Defaultinput-meta-output-meta-to-on.patch
+cve-2014-2524.nopatch
+0001-Support-stateless-inputrc-configuration.patch
+build.patch
+readline-6.2-shlib.patch
+tinfow.patch
