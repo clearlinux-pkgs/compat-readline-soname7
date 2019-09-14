@@ -6,7 +6,7 @@
 #
 Name     : compat-readline-soname7
 Version  : 7.0
-Release  : 3
+Release  : 4
 URL      : http://mirrors.kernel.org/gnu/readline/readline-7.0.tar.gz
 Source0  : http://mirrors.kernel.org/gnu/readline/readline-7.0.tar.gz
 Source1 : http://mirrors.kernel.org/gnu/readline/readline-7.0.tar.gz.sig
